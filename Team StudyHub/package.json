@@ -1,0 +1,14 @@
+{
+  "name": "team-studyhub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start-frontend": "cd . && vite",
+    "start-backend": "cd backend && npm start",
+    "dev": "concurrently \"npm:dev-backend\" \"npm:start-frontend\"",
+    "dev-backend": "cd backend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
