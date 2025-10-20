@@ -19,7 +19,30 @@ app.use(helmet())
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' }))
+
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.CLIENT_URL || 'http://localhost:3000',
+      'http://localhost:3000',
+      'https://your-production-domain.com' // Add your production domain here
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions))
 
 app.get('/api/health', (req,res)=>{
   res.json({ status: 'OK', message: 'Study Hub API is running' })
@@ -36,6 +59,9 @@ app.use('/api/chat', chatRoutes)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, ()=>{
-  console.log(`[local] Server running on port ${PORT}`)
+const HOST = process.env.HOST || '0.0.0.0'
+
+app.listen(PORT, HOST, ()=>{
+  console.log(`[${process.env.NODE_ENV || 'development'}] Server running on ${HOST}:${PORT}`)
+  console.log(`[${process.env.NODE_ENV || 'development'}] Health check: http://${HOST}:${PORT}/api/health`)
 })
