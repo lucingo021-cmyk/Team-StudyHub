@@ -6,9 +6,27 @@
     "start-frontend": "cd . && vite",
     "start-backend": "cd backend && npm start",
     "dev": "concurrently \"npm:dev-backend\" \"npm:start-frontend\"",
-    "dev-backend": "cd backend && npm run dev"
+    "dev-backend": "cd backend && npm run dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:backend": "cd backend && npm run build",
+    "build:all": "npm run build:backend && npm run build",
+    "start:prod": "concurrently \"npm:start-backend\" \"npm:preview\"",
+    "install:all": "npm install && cd backend && npm install",
+    "setup": "npm run install:all && cd backend && npm run prisma:generate && npm run prisma:push && npm run seed"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "@tailwindcss/postcss": "^4.1.14",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^8.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14",
+    "terser": "^5.44.0",
+    "vite": "^4.4.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
